@@ -55,6 +55,9 @@ defmodule PosterAppWeb.UserController do
 
   def delete(conn, %{"user_id" => id}) do
     user = UserContext.get_user!(id)
+    credential = UserContext.get_credential!(id)
+
+    {:ok, _credential} = UserContext.delete_credential(credential)
     {:ok, _user} = UserContext.delete_user(user)
 
     conn

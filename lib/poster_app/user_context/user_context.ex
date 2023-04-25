@@ -1,5 +1,6 @@
 defmodule PosterApp.UserContext do
   alias __MODULE__.User
+  alias __MODULE__.Credential
   alias PosterApp.Repo
 
   @doc "Returns a user changeset"
@@ -17,6 +18,9 @@ defmodule PosterApp.UserContext do
   @doc "Returns a specific user or raises an error"
   def get_user!(id), do: Repo.get!(User, id)
 
+  @spec get_credential!(any) :: any
+  def get_credential!(id), do: Repo.get_by(Credential, user_id: id)
+
   @doc "Returns all users in the system"
   def list_users, do: Repo.all(User)
 
@@ -29,4 +33,6 @@ defmodule PosterApp.UserContext do
 
   @doc "Delete a user"
   def delete_user(%User{} = user), do: Repo.delete(user)
+
+  def delete_credential(%Credential{} = credential), do: Repo.delete(credential)
 end

@@ -34,6 +34,20 @@ defmodule PosterAppWeb.Router do
     patch "/users/:user_id", UserController, :update
 
     delete "/users/:user_id", UserController, :delete
+
+    get "/posts/new", PostController, :new
+
+    post "/posts", PostController, :create
+
+    get "/posts", PostController, :index
+
+    get "/posts/:post_id/edit", PostController, :edit
+
+    put "/posts/:post_id", PostController, :update
+
+    patch "/posts/:post_id", PostController, :update
+
+    delete "/posts/:post_id", PostController, :delete
   end
 
   # Other scopes may use custom stacks.
