@@ -18,6 +18,8 @@ defmodule PosterApp.UserContext do
   @doc "Returns a specific user or raises an error"
   def get_user!(id), do: Repo.get!(User, id)
 
+  def get_user(id), do: Repo.get(User, id)
+
   @spec get_credential!(any) :: any
   def get_credential!(id), do: Repo.get_by(Credential, user_id: id)
 
@@ -35,4 +37,19 @@ defmodule PosterApp.UserContext do
   def delete_user(%User{} = user), do: Repo.delete(user)
 
   def delete_credential(%Credential{} = credential), do: Repo.delete(credential)
+
+  def authenticate_user(email, password) do
+    case Repo.get_by(Credential, email: email) do
+      nil ->
+        Argon2.no_user_verify()
+        {:error, :invalid_credentials}
+
+      credential ->
+        if Argon2.verify_pass(password, credential.password) do
+          {:ok, credential}
+        else
+          {:error, :invalid_credentials}
+        end
+    end
+  end
 end

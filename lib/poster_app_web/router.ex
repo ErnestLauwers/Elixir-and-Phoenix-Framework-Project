@@ -14,10 +14,24 @@ defmodule PosterAppWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :auth do
+    plug PosterAppWeb.Pipeline
+  end
+
+  pipeline :ensure_auth do
+    plug Guardian.Plug.EnsureAuthenticated
+  end
+
   scope "/", PosterAppWeb do
-    pipe_through :browser
+    pipe_through [:browser, :auth]
 
     get "/", PageController, :index
+
+    get "/login", SessionController, :new
+
+    post "/login", SessionController, :login
+
+    get "/logout", SessionController, :logout
 
     get "/users/new", UserController, :new
 
@@ -50,6 +64,11 @@ defmodule PosterAppWeb.Router do
     delete "/posts/:post_id", PostController, :delete
   end
 
+  scope "/admin", PosterAppWeb do
+    pipe_through [:browser, :auth, :ensure_auth]
+
+    resources "/users", UserController
+  end
   # Other scopes may use custom stacks.
   # scope "/api", PosterAppWeb do
   #   pipe_through :api
