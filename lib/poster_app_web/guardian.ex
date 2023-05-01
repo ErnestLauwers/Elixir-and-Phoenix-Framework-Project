@@ -31,6 +31,8 @@ defmodule PosterAppWeb.Guardian do
     case UserContext.get_credential_by_email(email) do
       nil -> {:error, :unauthored}
       credential ->
+        IO.puts("wtkkkkkkkkkkkkkkkkkkkk")
+        IO.inspect(credential)
         case validate_password(password, credential.hashed_password) do
           true -> create_token(credential)
           false -> {:error, :unauthorized}

@@ -72,7 +72,7 @@ defmodule PosterAppWeb.Router do
     delete "/posts/:post_id", PostController, :delete
   end
 
-  scope "/", AuthWeb do
+  scope "/", PosterAppWeb do
     pipe_through [:browser, :auth, :ensure_auth, :allowed_for_users]
 
     get "/user_scope", PageController, :user_index
