@@ -1,4 +1,6 @@
 defmodule PosterApp.UserContext do
+  import Ecto.Query, warn: false
+
   alias __MODULE__.User
   alias __MODULE__.Credential
   alias PosterApp.Repo
@@ -6,6 +8,10 @@ defmodule PosterApp.UserContext do
   @doc "Returns a user changeset"
   def change_user(%User{} = user) do
     user |> User.changeset(%{})
+  end
+
+  def change_credential(%Credential{} = credential) do
+    credential |> Credential.changeset(%{})
   end
 
   @doc "Creates a user based on some external attributes"
@@ -23,6 +29,14 @@ defmodule PosterApp.UserContext do
   @spec get_credential!(any) :: any
   def get_credential!(id), do: Repo.get_by(Credential, user_id: id)
 
+  def get_credential(id), do: Repo.get_by(Credential, user_id: id)
+
+  def get_credential_by_email(email) do
+    Credential
+    |> where(email: ^email)
+    |> Repo.one()
+  end
+
   @doc "Returns all users in the system"
   def list_users, do: Repo.all(User)
 
@@ -38,18 +52,4 @@ defmodule PosterApp.UserContext do
 
   def delete_credential(%Credential{} = credential), do: Repo.delete(credential)
 
-  def authenticate_user(email, password) do
-    case Repo.get_by(Credential, email: email) do
-      nil ->
-        Argon2.no_user_verify()
-        {:error, :invalid_credentials}
-
-      credential ->
-        if Argon2.verify_pass(password, credential.password) do
-          {:ok, credential}
-        else
-          {:error, :invalid_credentials}
-        end
-    end
-  end
 end

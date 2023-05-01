@@ -19,6 +19,7 @@ defmodule PosterApp.UserContext.User do
     |> cast(attrs, [:first_name, :last_name, :date_of_birth, :role])
     |> validate_required([:first_name, :last_name, :date_of_birth, :role])
     |> cast_assoc(:credentials)
+    |> cast_assoc(:posts)
     |> unique_constraint(:date_of_birth,
       name: :unique_users_index,
       message:

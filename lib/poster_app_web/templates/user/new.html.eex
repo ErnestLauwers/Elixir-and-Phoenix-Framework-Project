@@ -27,9 +27,9 @@
      <%= text_input c, :email, class: "w3-input w3-border" %>
      <%= error_tag c, :email %>
 
-     <%= label c, :password, class: "w3-text-black w3-left" %>
-     <%= text_input c, :password, class: "w3-input w3-border" %>
-     <%= error_tag c, :password %>
+     <%= label c, :hashed_password, class: "w3-text-black w3-left" %>
+     <%= text_input c, :hashed_password, class: "w3-input w3-border" %>
+     <%= error_tag c, :hashed_password %>
  <% end %>
 
 <div>

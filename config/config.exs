@@ -44,6 +44,10 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+config :poster_app, PosterAppWeb.Guardian,
+issuer: "poster_app",
+secret_key: "t940QYpUZWcuO6d762TAgY/3JBRBOmEeeYhnGc36gify4d70FjW2EwdH7Lu5Dsh0"
+
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 

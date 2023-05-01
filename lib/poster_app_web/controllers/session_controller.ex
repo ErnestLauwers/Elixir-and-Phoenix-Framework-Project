@@ -3,10 +3,10 @@ defmodule PosterAppWeb.SessionController do
 
   alias PosterAppWeb.Guardian
   alias PosterApp.UserContext
-  alias PosterApp.UserContext.User
+  alias PosterApp.UserContext.Credential
 
   def new(conn, _) do
-    changeset = UserContext.change_user(%User{})
+    changeset = UserContext.change_credential(%Credential{})
     maybe_user = Guardian.Plug.current_resource(conn)
 
     if maybe_user do
@@ -16,27 +16,24 @@ defmodule PosterAppWeb.SessionController do
     end
   end
 
-  def login(conn, %{"user" => %{"email" => email, "password" => password}}) do
-    UserContext.authenticate_user(email, password)
-    |> login_reply(conn)
+  def login(conn, %{"credential" => %{"email" => email, "password" => password}}) do
+    try do
+      credential = Guardian.authenticate(email, password)
+      conn
+      |> put_flash(:info, "Welcome back!")
+      |> redirect(to: "/")
+    rescue
+      exception ->
+        IO.puts("Exception: #{inspect exception}")
+        conn
+        |> put_flash(:error, "Invalid email or password")
+        |> redirect(to: "/login")
+    end
   end
 
   def logout(conn, _) do
     conn
     |> Guardian.Plug.sign_out()
     |> redirect(to: "/login")
-  end
-
-  defp login_reply({:ok, user}, conn) do
-    conn
-    |> put_flash(:info, "Welcome back!")
-    |> Guardian.Plug.sign_in(user)
-    |> redirect(to: "/user_scope")
-  end
-
-  defp login_reply({:error, reason}, conn) do
-    conn
-    |> put_flash(:error, to_string(reason))
-    |> new(%{})
   end
 end
