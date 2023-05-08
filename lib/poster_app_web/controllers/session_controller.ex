@@ -14,7 +14,7 @@ defmodule PosterAppWeb.SessionController do
         |> put_flash(:info, "Already Logged In!")
         |> redirect(to: "/")
     else
-      render(conn, "new.html", changeset: changeset, action: Routes.session_path(conn, :login))
+      render(conn, "new.html", changeset: changeset, action: Routes.session_path(conn, :login), user_id: user_id)
     end
   end
 

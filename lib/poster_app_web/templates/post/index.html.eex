@@ -7,7 +7,7 @@
             <th>Text</th>
             <th>User</th>
             <th>Created at</th>
-            <th>Updated at</th>
+            <th>Hashtag(s)</th>
         </tr>
     </thead>
     <tbody>
@@ -17,12 +17,13 @@
             <td><%= post.text %></td>
             <td><%= if post.user, do: post.user.first_name, else: "Unknown" %></td>
             <td><%= post.inserted_at %></td>
-            <td><%= post.updated_at %></td>
-
-             <td>
-                <span><%= link "Edit", to: Routes.post_path(@conn, :edit, post) %></span>
-                <span><%= link "Delete", to: Routes.post_path(@conn, :delete, post),
-                method: :delete, data: [confirm: "Are you sure?"] %></span>
+            <td><%= Enum.join(Enum.map(post.hashtags, & &1.name), ", ") %></td>
+            <td>
+                <%= if @user_id == post.user_id do %>
+                    <span><%= link "Edit", to: Routes.post_path(@conn, :edit, post) %></span>
+                    <span><%= link "Delete", to: Routes.post_path(@conn, :delete, post),
+                    method: :delete, data: [confirm: "Are you sure?"] %></span>
+                <% end %>
             </td>
         </tr>
         <% end %>

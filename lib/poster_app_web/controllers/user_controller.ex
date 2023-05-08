@@ -1,12 +1,13 @@
 defmodule PosterAppWeb.UserController do
   use PosterAppWeb, :controller
 
+  alias PosterAppWeb.Guardian
   alias PosterApp.UserContext
   alias PosterApp.UserContext.User
 
   def new(conn, _parameters) do
     changeset = UserContext.change_user(%User{})
-    render(conn, "new.html", changeset: changeset)
+    render(conn, "new.html", changeset: changeset, user_id: nil)
   end
 
   def create(conn, %{"user" => user_params}) do
@@ -14,14 +15,15 @@ defmodule PosterAppWeb.UserController do
       {:ok, user} ->
         conn
         |> put_flash(:info, "User #{user.first_name} #{user.last_name} created successfully.")
-        |> redirect(to: Routes.user_path(conn, :index))
+        |> Guardian.Plug.sign_in(user)
+        |> put_session(:user_id, user.id)
+        |> redirect(to: Routes.page_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         IO.inspect(changeset.errors)
-        render(conn, "new.html", changeset: changeset)
+        render(conn, "new.html", changeset: changeset, user_id: nil)
     end
   end
-
 
   def index(conn, _params) do
     users = UserContext.list_users()
@@ -32,7 +34,9 @@ defmodule PosterAppWeb.UserController do
 
   def show(conn, %{"user_id" => id}) do
     user = UserContext.get_user!(id)
-    render(conn, "show.html", user: user)
+    credential = Guardian.Plug.current_resource(conn);
+    user_id = credential.user_id;
+    render(conn, "show.html", user: user, user_id: user_id)
   end
 
   def edit(conn, %{"user_id" => id}) do

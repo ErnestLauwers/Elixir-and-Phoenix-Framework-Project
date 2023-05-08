@@ -3,15 +3,21 @@ defmodule PosterAppWeb.PostController do
 
   alias PosterApp.PostContext
   alias PosterApp.PostContext.Post
+  alias PosterApp.PostContext.Hashtag
+  alias PosterApp.Repo
 
   def index(conn, _params) do
     posts = PostContext.list_posts()
-    render(conn, "index.html", posts: posts)
+    credential = Guardian.Plug.current_resource(conn);
+    user_id = credential.user_id;
+    render(conn, "index.html", posts: posts, user_id: user_id)
   end
 
   def new(conn, _parameters) do
-    changeset = PostContext.change_post(%Post{})
-    render(conn, "new.html", changeset: changeset)
+    changeset = PostContext.change_post(%Post{hashtags: []})
+    credential = Guardian.Plug.current_resource(conn);
+    user_id = credential.user_id;
+    render(conn, "new.html", changeset: changeset, user_id: user_id)
   end
 
   def create(conn, %{"post" => post_params}) do

@@ -8,6 +8,8 @@
 </div>
 <% end %>
 
+<%= hidden_input f, :user_id, value: @user_id %>
+
 <%= label f, :title %>
 <%= text_input f, :title %>
 <%= error_tag f, :title %>
@@ -16,12 +18,13 @@
 <%= text_input f, :text %>
 <%= error_tag f, :text %>
 
-<%= label f, :user_id %>
-<%= select f, :user_id, Enum.map(UserContext.list_users(), &{&1.first_name, &1.id}) %>
-<%= error_tag f, :user_id %>
+<%= label f, :hashtags %>
+<%= hashtag_input f, :hashtags %>
+<%= error_tag f, :hashtags %>
+<small class="help-text">hashtags seperated by commas</small>
 
 <div>
-    <%= submit "Add" %>
+    <%= submit "Post" %>
 </div>
 <% end %>
 
