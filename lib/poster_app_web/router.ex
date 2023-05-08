@@ -57,11 +57,16 @@ defmodule PosterAppWeb.Router do
 
     delete "/users/:user_id", UserController, :delete
 
+  end
+
+  scope "/", PosterAppWeb do
+    pipe_through [:browser, :auth, :ensure_auth, :allowed_for_users]
+
     get "/posts/new", PostController, :new
 
     post "/posts", PostController, :create
 
-
+    get "/posts", PostController, :index
 
     get "/posts/:post_id/edit", PostController, :edit
 
@@ -70,12 +75,6 @@ defmodule PosterAppWeb.Router do
     patch "/posts/:post_id", PostController, :update
 
     delete "/posts/:post_id", PostController, :delete
-  end
-
-  scope "/", PosterAppWeb do
-    pipe_through [:browser, :auth, :ensure_auth, :allowed_for_users]
-
-    get "/posts", PostController, :index
 
     get "/user_scope", PageController, :user_index
   end

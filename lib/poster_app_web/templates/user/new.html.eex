@@ -19,7 +19,7 @@
 <%= error_tag f, :last_name %>
 
 <%= label f, :date_of_birth %>
-<%= date_select f, :date_of_birth, year: [options: 1910..2020] %>
+<%= date_select f, :date_of_birth, year: [options: 1910..2005] %>
 <%= error_tag f, :date_of_birth %>
 
 <%= inputs_for f, :credentials, fn c -> %>
@@ -37,4 +37,4 @@
 </div>
 <% end %>
 
-<span><%= link "Back", to: Routes.user_path(@conn, :index) %></span>
+<span><%= link "Back", to: Routes.page_path(@conn, :index) %></span>

@@ -25,7 +25,9 @@ defmodule PosterAppWeb.UserController do
 
   def index(conn, _params) do
     users = UserContext.list_users()
-    render(conn, "index.html", users: users)
+    credential = Guardian.Plug.current_resource(conn);
+    user_id = credential.user_id;
+    render(conn, "index.html", users: users, user_id: user_id)
   end
 
   def show(conn, %{"user_id" => id}) do

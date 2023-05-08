@@ -3,10 +3,10 @@
 <table>
     <thead>
         <tr>
-            <th>first name</th>
-            <th>last name</th>
-            <th>date of birth</th>
-            <th>role</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Date of Birth</th>
+            <th>Role</th>
         </tr>
     </thead>
     <tbody>
@@ -19,10 +19,12 @@
 
             <td>
                 <span><%= link "Show", to: Routes.user_path(@conn, :show, user) %></span>
-                <span><%= link "Edit", to: Routes.user_path(@conn, :edit, user) %></span>
-                <span><%= link "Delete", to: Routes.user_path(@conn, :delete, user),
-                method: :delete, data: [confirm: "Are you sure?"] %></span>
-            </td>
+                <%= if @user_id == user.id do %>
+                    <span><%= link "Edit", to: Routes.user_path(@conn, :edit, user) %></span>
+                    <span><%= link "Delete", to: Routes.user_path(@conn, :delete, user),
+                    method: :delete, data: [confirm: "Are you sure?"] %></span>
+                    </td>
+                <% end %>
         </tr>
         <% end %>
     </tbody>
