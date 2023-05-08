@@ -4,6 +4,8 @@ defmodule PosterApp.UserContext.User do
   alias PosterApp.PostContext.Post
   alias PosterApp.UserContext.Credential
 
+  @acceptable_roles ["admin", "user"]
+
   schema "users" do
     field :date_of_birth, :date
     field :first_name, :string
@@ -13,11 +15,14 @@ defmodule PosterApp.UserContext.User do
     has_one :credentials, Credential
   end
 
+  def get_acceptable_roles, do: @acceptable_roles
+
   @doc false
   def changeset(user, attrs) do
     user
     |> cast(attrs, [:first_name, :last_name, :date_of_birth, :role])
     |> validate_required([:first_name, :last_name, :date_of_birth, :role])
+    |> validate_inclusion(:role, @acceptable_roles)
     |> cast_assoc(:credentials)
     |> cast_assoc(:posts)
     |> unique_constraint(:date_of_birth,

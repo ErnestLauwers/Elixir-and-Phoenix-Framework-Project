@@ -28,4 +28,3 @@
     </tbody>
 </table>
 
-<%= link "New user", to: Routes.user_path(@conn, :new) %>

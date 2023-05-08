@@ -23,11 +23,11 @@ defmodule PosterAppWeb.Router do
   end
 
   pipeline :allowed_for_users do
-    plug PosterAppWeb.Plugs.AuthorizationPlug, ["Admin", "User"]
+    plug PosterAppWeb.Plugs.AuthorizationPlug, ["admin", "user"]
   end
 
   pipeline :allowed_for_admins do
-    plug PosterAppWeb.Plugs.AuthorizationPlug, ["Admin"]
+    plug PosterAppWeb.Plugs.AuthorizationPlug, ["admin"]
   end
 
   scope "/", PosterAppWeb do
@@ -61,7 +61,7 @@ defmodule PosterAppWeb.Router do
 
     post "/posts", PostController, :create
 
-    get "/posts", PostController, :index
+
 
     get "/posts/:post_id/edit", PostController, :edit
 
@@ -74,6 +74,8 @@ defmodule PosterAppWeb.Router do
 
   scope "/", PosterAppWeb do
     pipe_through [:browser, :auth, :ensure_auth, :allowed_for_users]
+
+    get "/posts", PostController, :index
 
     get "/user_scope", PageController, :user_index
   end

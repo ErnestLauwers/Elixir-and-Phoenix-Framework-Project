@@ -23,9 +23,9 @@ defmodule PosterAppWeb.SessionController do
       {:ok, credential, token} ->
         user = UserContext.get_user!(credential.user_id)
         conn
+        |> Guardian.Plug.sign_in(credential)
         |> put_session(:user_id, credential.user_id)
         |> put_flash(:info, "Successfully logged in as #{user.first_name} #{user.last_name}!")
-        |> Guardian.Plug.sign_in(credential)
         |> redirect(to: "/")
       {:error, :unauthored} ->
         conn
