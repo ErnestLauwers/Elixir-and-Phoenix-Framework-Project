@@ -17,6 +17,7 @@
             <%= if @user_id != nil do %>
               <li><%= link "Users", to: Routes.user_path(@conn, :index) %></li>
               <li><%= link "Posts", to: Routes.post_path(@conn, :index) %></li>
+              <li><%= link "Search", to: Routes.hashtag_path(@conn, :index) %></li>
             <% end %>
           </ul>
         </nav>

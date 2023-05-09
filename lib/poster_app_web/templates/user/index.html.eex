@@ -19,7 +19,7 @@
 
             <td>
                 <span><%= link "Show", to: Routes.user_path(@conn, :show, user) %></span>
-                <%= if @user_id == user.id do %>
+                <%= if @user_id == user.id || @user.role == "admin"do %>
                     <span><%= link "Edit", to: Routes.user_path(@conn, :edit, user) %></span>
                     <span><%= link "Delete", to: Routes.user_path(@conn, :delete, user),
                     method: :delete, data: [confirm: "Are you sure?"] %></span>

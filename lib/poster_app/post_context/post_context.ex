@@ -14,11 +14,40 @@ defmodule PosterApp.PostContext do
     post |> Post.changeset(%{})
   end
 
+  def change_hashtag(%Hashtag{} = hashtag) do
+    hashtag |> Hashtag.changeset(%{})
+  end
+
   def create_post(attributes \\ %{}) do
     %Post{}
     |> Post.changeset(attributes)
     |> Ecto.Changeset.put_assoc(:hashtags, posts_hashtags(attributes))
     |> Repo.insert()
+  end
+
+  def get_posts_with_hashtag(name) do
+    all_posts = list_posts()
+    matching_posts = []
+
+    for post <- all_posts do
+      hashtags = post.hashtags
+      IO.inspect(hashtags)
+      for hashtag <- hashtags do
+        IO.inspect(name)
+        if hashtag.name == name do
+          matching_posts = [post | matching_posts]
+          IO.inspect(matching_posts)
+          IO.puts("kanker")
+        end
+      end
+    end
+    IO.inspect(matching_posts)
+    matching_posts
+  end
+
+  defp has_hashtag?(post, name) do
+    hashtags = post.hashtags
+    Enum.member?(hashtags, name)
   end
 
   defp parse_hashtags(nil), do: []

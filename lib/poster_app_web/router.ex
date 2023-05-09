@@ -45,22 +45,15 @@ defmodule PosterAppWeb.Router do
 
     post "/users", UserController, :create
 
-    get "/users", UserController, :index
-
-    get "/users/:user_id", UserController, :show
-
-    get "/users/:user_id/edit", UserController, :edit
-
-    put "/users/:user_id", UserController, :update
-
-    patch "/users/:user_id", UserController, :update
-
     delete "/users/:user_id", UserController, :delete
-
   end
 
   scope "/", PosterAppWeb do
     pipe_through [:browser, :auth, :ensure_auth, :allowed_for_users]
+
+    get "/hashtags/search", HashtagController, :index
+
+    post "hashtags/search/result", HashtagController, :show
 
     get "/posts/new", PostController, :new
 
@@ -76,14 +69,22 @@ defmodule PosterAppWeb.Router do
 
     delete "/posts/:post_id", PostController, :delete
 
+    get "/users", UserController, :index
+
+    get "/users/:user_id", UserController, :show
+
+    get "/users/:user_id/edit", UserController, :edit
+
+    put "/users/:user_id", UserController, :update
+
+    patch "/users/:user_id", UserController, :update
+
     get "/user_scope", PageController, :user_index
   end
 
   scope "/admin", PosterAppWeb do
     pipe_through [:browser, :auth, :ensure_auth, :allowed_for_admins]
 
-    resources "/users", UserController
-    get "/", PageController, :admin_index
   end
   # Other scopes may use custom stacks.
   # scope "/api", PosterAppWeb do
