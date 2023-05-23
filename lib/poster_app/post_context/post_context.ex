@@ -26,26 +26,13 @@ defmodule PosterApp.PostContext do
   end
 
   def get_posts_with_hashtag(name) do
-    all_posts = list_posts()
-    matching_posts = []
-
-    for post <- all_posts do
-      hashtags = post.hashtags
-      IO.inspect(hashtags)
-
-      for hashtag <- hashtags do
-        IO.inspect(name)
-
-        if hashtag.name == name do
-          matching_posts = [post | matching_posts]
-          IO.inspect(matching_posts)
-          IO.puts("kanker")
-        end
-      end
-    end
-
-    IO.inspect(matching_posts)
-    matching_posts
+    from(post in Post,
+      join: hashtag in assoc(post, :hashtags),
+      where: hashtag.name == ^name,
+      preload: [:hashtags]
+    )
+    |> Repo.all()
+    |> Repo.preload(:user)
   end
 
   defp parse_hashtags(nil), do: []

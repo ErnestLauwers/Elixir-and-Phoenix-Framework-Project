@@ -22,3 +22,5 @@
         <% end %>
     </tbody>
 </table>
+
+<span><%= link "Search Again", to: Routes.hashtag_path(@conn, :index) %></span>
