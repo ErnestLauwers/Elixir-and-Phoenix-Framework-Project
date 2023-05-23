@@ -1,6 +1,4 @@
 defmodule PosterAppWeb.PostView do
-  alias PosterApp.UserContext
-
   use PosterAppWeb, :view
 
   def hashtag_input(form, field, opts \\ []) do

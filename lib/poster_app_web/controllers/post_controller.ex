@@ -3,20 +3,18 @@ defmodule PosterAppWeb.PostController do
 
   alias PosterApp.PostContext
   alias PosterApp.PostContext.Post
-  alias PosterApp.PostContext.Hashtag
-  alias PosterApp.Repo
 
   def index(conn, _params) do
     posts = PostContext.list_posts()
-    credential = Guardian.Plug.current_resource(conn);
-    user_id = credential.user_id;
+    credential = Guardian.Plug.current_resource(conn)
+    user_id = credential.user_id
     render(conn, "index.html", posts: posts, user_id: user_id)
   end
 
   def new(conn, _parameters) do
     changeset = PostContext.change_post(%Post{hashtags: []})
-    credential = Guardian.Plug.current_resource(conn);
-    user_id = credential.user_id;
+    credential = Guardian.Plug.current_resource(conn)
+    user_id = credential.user_id
     render(conn, "new.html", changeset: changeset, user_id: user_id)
   end
 
@@ -36,17 +34,18 @@ defmodule PosterAppWeb.PostController do
   def edit(conn, %{"post_id" => id}) do
     post = PostContext.get_post!(id)
     changeset = PostContext.change_post(post)
-    render(conn, "edit.html", post: post, changeset: changeset)
+    user_id = Guardian.Plug.current_resource(conn)
+    render(conn, "edit.html", post: post, changeset: changeset, user_id: user_id)
   end
 
   def update(conn, %{"post_id" => id, "post" => post_params}) do
     post = PostContext.get_post!(id)
 
     case PostContext.update_post(post, post_params) do
-      {:ok, post} ->
+      {:ok, _post} ->
         conn
         |> put_flash(:info, "Post updated successfully.")
-        |> redirect(to: Routes.post_path(conn, :index, post))
+        |> redirect(to: Routes.post_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", post: post, changeset: changeset)

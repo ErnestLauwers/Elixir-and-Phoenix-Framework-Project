@@ -20,7 +20,7 @@ defmodule PosterApp.UserContext.Credential do
   defp put_password_hash(
          %Ecto.Changeset{valid?: true, changes: %{hashed_password: hashed_password}} = changeset
        ) do
-    change(changeset, hashed_password: Argon2.hash_pwd_salt(hashed_password))
+    change(changeset, hashed_password: Pbkdf2.hash_pwd_salt(hashed_password))
   end
 
   defp put_password_hash(changeset), do: changeset

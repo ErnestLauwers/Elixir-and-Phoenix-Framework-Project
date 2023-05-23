@@ -1,15 +1,14 @@
 defmodule PosterAppWeb.Plugs.AuthorizationPlug do
   import Plug.Conn
-  alias PosterApp.UserContext.User
-  alias PosterApp.UserContext.Credential
   alias PosterApp.UserContext
   alias Phoenix.Controller
 
   def init(options), do: options
 
   def call(conn, roles) do
-    credential = Guardian.Plug.current_resource(conn);
-    user = UserContext.get_user!(credential.user_id);
+    credential = Guardian.Plug.current_resource(conn)
+    user = UserContext.get_user!(credential.user_id)
+
     conn
     |> grant_access(user.role in roles)
   end

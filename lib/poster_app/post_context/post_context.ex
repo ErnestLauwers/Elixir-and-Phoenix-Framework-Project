@@ -32,8 +32,10 @@ defmodule PosterApp.PostContext do
     for post <- all_posts do
       hashtags = post.hashtags
       IO.inspect(hashtags)
+
       for hashtag <- hashtags do
         IO.inspect(name)
+
         if hashtag.name == name do
           matching_posts = [post | matching_posts]
           IO.inspect(matching_posts)
@@ -41,22 +43,18 @@ defmodule PosterApp.PostContext do
         end
       end
     end
+
     IO.inspect(matching_posts)
     matching_posts
-  end
-
-  defp has_hashtag?(post, name) do
-    hashtags = post.hashtags
-    Enum.member?(hashtags, name)
   end
 
   defp parse_hashtags(nil), do: []
 
   defp parse_hashtags(hashtags) do
     for hashtag <- String.split(hashtags, ","),
-      hashtag = hashtag |> String.trim() |> String.downcase(),
-      hashtag != "",
-      do: %{name: hashtag}
+        hashtag = hashtag |> String.trim() |> String.downcase(),
+        hashtag != "",
+        do: %{name: hashtag}
   end
 
   def get_post_with_hashtags!(id), do: Post |> preload(:hashtags) |> Repo.get!(id)

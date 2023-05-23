@@ -84,8 +84,8 @@ defmodule PosterAppWeb.Router do
 
   scope "/admin", PosterAppWeb do
     pipe_through [:browser, :auth, :ensure_auth, :allowed_for_admins]
-
   end
+
   # Other scopes may use custom stacks.
   # scope "/api", PosterAppWeb do
   #   pipe_through :api

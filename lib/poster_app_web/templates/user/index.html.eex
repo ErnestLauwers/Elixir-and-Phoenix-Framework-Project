@@ -21,12 +21,13 @@
                 <span><%= link "Show", to: Routes.user_path(@conn, :show, user) %></span>
                 <%= if @user_id == user.id || @user.role == "admin"do %>
                     <span><%= link "Edit", to: Routes.user_path(@conn, :edit, user) %></span>
+                    <%= if user.role != "admin"do %>
                     <span><%= link "Delete", to: Routes.user_path(@conn, :delete, user),
                     method: :delete, data: [confirm: "Are you sure?"] %></span>
                     </td>
+                    <% end %>
                 <% end %>
         </tr>
         <% end %>
     </tbody>
 </table>
-

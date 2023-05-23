@@ -27,33 +27,34 @@ defmodule PosterAppWeb.UserController do
 
   def index(conn, _params) do
     users = UserContext.list_users()
-    credential = Guardian.Plug.current_resource(conn);
-    user_id = credential.user_id;
-    user = UserContext.get_user!(user_id);
+    credential = Guardian.Plug.current_resource(conn)
+    user_id = credential.user_id
+    user = UserContext.get_user!(user_id)
     render(conn, "index.html", users: users, user_id: user_id, user: user)
   end
 
   def show(conn, %{"user_id" => id}) do
     user = UserContext.get_user!(id)
-    credential = Guardian.Plug.current_resource(conn);
-    user_id = credential.user_id;
+    credential = Guardian.Plug.current_resource(conn)
+    user_id = credential.user_id
     render(conn, "show.html", user: user, user_id: user_id)
   end
 
   def edit(conn, %{"user_id" => id}) do
     user = UserContext.get_user!(id)
     changeset = UserContext.change_user(user)
-    render(conn, "edit.html", user: user, changeset: changeset)
+    user_id = Guardian.Plug.current_resource(conn)
+    render(conn, "edit.html", user: user, changeset: changeset, user_id: user_id)
   end
 
   def update(conn, %{"user_id" => id, "user" => user_params}) do
     user = UserContext.get_user!(id)
 
     case UserContext.update_user(user, user_params) do
-      {:ok, user} ->
+      {:ok, _user} ->
         conn
         |> put_flash(:info, "User updated successfully.")
-        |> redirect(to: Routes.user_path(conn, :show, user))
+        |> redirect(to: Routes.user_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", user: user, changeset: changeset)
@@ -63,12 +64,26 @@ defmodule PosterAppWeb.UserController do
   def delete(conn, %{"user_id" => id}) do
     user = UserContext.get_user!(id)
     credential = UserContext.get_credential!(id)
+    credential_logged_in = Guardian.Plug.current_resource(conn)
 
-    {:ok, _credential} = UserContext.delete_credential(credential)
-    {:ok, _user} = UserContext.delete_user(user)
+    user_logged_in = UserContext.get_user!(credential_logged_in.user_id)
 
-    conn
-    |> put_flash(:info, "User deleted successfully.")
-    |> redirect(to: Routes.user_path(conn, :index))
+    if user_logged_in.role == "user" do
+      {:ok, _credential} = UserContext.delete_credential(credential)
+      {:ok, _user} = UserContext.delete_user(user)
+
+      conn
+      |> Guardian.Plug.sign_out()
+      |> delete_session(:user_id)
+      |> put_flash(:info, "User deleted successfully.")
+      |> redirect(to: "/")
+    else
+      {:ok, _credential} = UserContext.delete_credential(credential)
+      {:ok, _user} = UserContext.delete_user(user)
+
+      conn
+      |> put_flash(:info, "User deleted successfully.")
+      |> redirect(to: Routes.user_path(conn, :index))
+    end
   end
 end
