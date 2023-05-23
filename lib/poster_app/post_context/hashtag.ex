@@ -5,7 +5,7 @@ defmodule PosterApp.PostContext.Hashtag do
 
   schema "hashtags" do
     field :name, :string
-    many_to_many :posts, Post, join_through: "posts_hashtags"
+    many_to_many :posts, Post, join_through: "posts_hashtags", on_delete: :delete_all
   end
 
   @doc false

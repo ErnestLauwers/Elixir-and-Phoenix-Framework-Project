@@ -25,6 +25,12 @@ defmodule PosterApp.PostContext do
     |> Repo.insert()
   end
 
+  def create_hashtag(attributes) do
+    %Hashtag{}
+    |> Hashtag.changeset(attributes)
+    |> Repo.insert()
+  end
+
   def get_posts_with_hashtag(name) do
     from(post in Post,
       join: hashtag in assoc(post, :hashtags),

@@ -21,6 +21,12 @@ defmodule PosterApp.UserContext do
     |> Repo.insert()
   end
 
+  def create_credential(attributes) do
+    %Credential{}
+    |> Credential.changeset(attributes)
+    |> Repo.insert()
+  end
+
   @doc "Returns a specific user or raises an error"
   def get_user!(id), do: Repo.get!(User, id)
 
@@ -51,5 +57,4 @@ defmodule PosterApp.UserContext do
   def delete_user(%User{} = user), do: Repo.delete(user)
 
   def delete_credential(%Credential{} = credential), do: Repo.delete(credential)
-
 end

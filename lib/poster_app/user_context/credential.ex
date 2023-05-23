@@ -12,7 +12,7 @@ defmodule PosterApp.UserContext.Credential do
   @doc false
   def changeset(credential, attrs) do
     credential
-    |> cast(attrs, [:email, :hashed_password])
+    |> cast(attrs, [:email, :hashed_password, :user_id])
     |> validate_required([:email, :hashed_password])
     |> put_password_hash()
   end

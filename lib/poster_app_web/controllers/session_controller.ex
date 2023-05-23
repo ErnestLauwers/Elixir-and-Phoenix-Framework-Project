@@ -7,9 +7,9 @@ defmodule PosterAppWeb.SessionController do
 
   def new(conn, _) do
     changeset = UserContext.change_credential(%Credential{})
-    user_id = get_session(conn, :user_id)
+    credential = Guardian.Plug.current_resource(conn)
 
-    if user_id do
+    if credential do
       conn
       |> put_flash(:info, "Already Logged In!")
       |> redirect(to: "/")
@@ -17,7 +17,7 @@ defmodule PosterAppWeb.SessionController do
       render(conn, "new.html",
         changeset: changeset,
         action: Routes.session_path(conn, :login),
-        user_id: user_id
+        user_id: nil
       )
     end
   end
@@ -29,7 +29,6 @@ defmodule PosterAppWeb.SessionController do
 
         conn
         |> Guardian.Plug.sign_in(user)
-        |> put_session(:user_id, credential.user_id)
         |> put_flash(:info, "Successfully logged in as #{user.first_name} #{user.last_name}!")
         |> redirect(to: "/")
 
@@ -48,7 +47,6 @@ defmodule PosterAppWeb.SessionController do
   def logout(conn, _) do
     conn
     |> Guardian.Plug.sign_out()
-    |> delete_session(:user_id)
     |> put_flash(:info, "Successfully logged out!")
     |> redirect(to: "/")
   end
