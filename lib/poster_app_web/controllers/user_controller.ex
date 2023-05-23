@@ -57,7 +57,9 @@ defmodule PosterAppWeb.UserController do
         |> redirect(to: Routes.user_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", user: user, changeset: changeset)
+        credential = Guardian.Plug.current_resource(conn)
+        user_id = credential.user_id
+        render(conn, "edit.html", user: user, changeset: changeset, user_id: user_id)
     end
   end
 

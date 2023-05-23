@@ -44,8 +44,6 @@ defmodule PosterAppWeb.Router do
     get "/users/new", UserController, :new
 
     post "/users", UserController, :create
-
-    delete "/users/:user_id", UserController, :delete
   end
 
   scope "/", PosterAppWeb do
@@ -80,6 +78,8 @@ defmodule PosterAppWeb.Router do
     patch "/users/:user_id", UserController, :update
 
     get "/user_scope", PageController, :user_index
+
+    delete "/users/:user_id", UserController, :delete
   end
 
   scope "/admin", PosterAppWeb do

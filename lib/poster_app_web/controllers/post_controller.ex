@@ -1,6 +1,7 @@
 defmodule PosterAppWeb.PostController do
   use PosterAppWeb, :controller
 
+  alias PosterApp.UserContext
   alias PosterApp.PostContext
   alias PosterApp.PostContext.Post
 
@@ -8,7 +9,8 @@ defmodule PosterAppWeb.PostController do
     posts = PostContext.list_posts()
     credential = Guardian.Plug.current_resource(conn)
     user_id = credential.user_id
-    render(conn, "index.html", posts: posts, user_id: user_id)
+    user = UserContext.get_user!(user_id)
+    render(conn, "index.html", posts: posts, user_id: user_id, user: user)
   end
 
   def new(conn, _parameters) do
@@ -26,8 +28,10 @@ defmodule PosterAppWeb.PostController do
         |> redirect(to: Routes.post_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
+        credential = Guardian.Plug.current_resource(conn)
+        user_id = credential.user_id
         IO.inspect(changeset.errors)
-        render(conn, "new.html", changeset: changeset)
+        render(conn, "new.html", changeset: changeset, user_id: user_id)
     end
   end
 

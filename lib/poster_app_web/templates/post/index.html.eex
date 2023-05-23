@@ -19,7 +19,7 @@
             <td><%= post.inserted_at %></td>
             <td><%= Enum.join(Enum.map(post.hashtags, & &1.name), ", ") %></td>
             <td>
-                <%= if @user_id == post.user_id do %>
+                <%= if @user_id == post.user_id || @user.role == "admin"do %>
                     <span><%= link "Edit", to: Routes.post_path(@conn, :edit, post) %></span>
                     <span><%= link "Delete", to: Routes.post_path(@conn, :delete, post),
                     method: :delete, data: [confirm: "Are you sure?"] %></span>
