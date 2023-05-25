@@ -2,8 +2,6 @@ defmodule PosterAppWeb.Guardian do
   use Guardian, otp_app: :poster_app
 
   alias PosterApp.UserContext
-  alias PosterApp.UserContext.User
-  alias PosterApp.UserContext.Credential
 
   def subject_for_token(%{id: id}, _claims) do
     sub = to_string(id)
@@ -27,9 +25,12 @@ defmodule PosterAppWeb.Guardian do
 
   def authenticate(email, password) do
     case UserContext.get_credential_by_email(email) do
-      nil -> {:error, :unauthored}
+      nil ->
+        {:error, :unauthored}
+
       credential ->
         IO.inspect(credential)
+
         case validate_password(password, credential.hashed_password) do
           true -> create_token(credential)
           false -> {:error, :unauthorized}
@@ -38,7 +39,7 @@ defmodule PosterAppWeb.Guardian do
   end
 
   defp validate_password(password, hashed_password) do
-    Argon2.verify_pass(password, hashed_password)
+    Pbkdf2.verify_pass(password, hashed_password)
   end
 
   defp create_token(credential) do

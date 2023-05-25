@@ -7,6 +7,10 @@
             <th>Last Name</th>
             <th>Date of Birth</th>
             <th>Role</th>
+            <th>Show</th>
+            <th>Edit</th>
+            <th>Delete</th>
+            <th>Follow</th>
         </tr>
     </thead>
     <tbody>
@@ -19,14 +23,31 @@
 
             <td>
                 <span><%= link "Show", to: Routes.user_path(@conn, :show, user) %></span>
-                <%= if @user_id == user.id || @user.role == "admin"do %>
-                    <span><%= link "Edit", to: Routes.user_path(@conn, :edit, user) %></span>
+            </td>
+            <%= if @user_id == user.id || @user.role == "admin" do %>
+                <td><span><%= link "Edit", to: Routes.user_path(@conn, :edit, user) %></span></td>
+                <%= if user.role != "admin"do %>
+                <td>
                     <span><%= link "Delete", to: Routes.user_path(@conn, :delete, user),
                     method: :delete, data: [confirm: "Are you sure?"] %></span>
-                    </td>
+                </td>
+                <td></td>
                 <% end %>
+            <% end %>
+
+            <%= if @user_id != user.id do %>
+                <td></td>
+                <td></td>
+                <td>
+                    <%= if user.id in @user.following do %>
+                        <%= button "Unfollow", to: Routes.user_path(@conn, :unfollow, user), method: :patch %>
+                    <% else %>
+                        <%= button "Follow", to: Routes.user_path(@conn, :follow, user), method: :patch %>
+                    <% end %>
+                </td>
+            <% end %>
+
         </tr>
         <% end %>
     </tbody>
 </table>
-

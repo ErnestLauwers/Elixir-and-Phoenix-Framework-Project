@@ -18,3 +18,5 @@
     <%= submit "Submit", class: "btn btn-primary" %>
 </div>
 <% end %>
+
+<span><%= link "Back", to: "/" %></span>

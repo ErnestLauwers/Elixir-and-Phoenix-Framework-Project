@@ -21,6 +21,12 @@ defmodule PosterApp.UserContext do
     |> Repo.insert()
   end
 
+  def create_credential(attributes) do
+    %Credential{}
+    |> Credential.changeset(attributes)
+    |> Repo.insert()
+  end
+
   @doc "Returns a specific user or raises an error"
   def get_user!(id), do: Repo.get!(User, id)
 
@@ -38,7 +44,14 @@ defmodule PosterApp.UserContext do
   end
 
   @doc "Returns all users in the system"
-  def list_users, do: Repo.all(User)
+  def list_users do
+    query =
+      from(u in User,
+        order_by: [asc: u.first_name]
+      )
+
+    Repo.all(query)
+  end
 
   @doc "Update an existing user with external attributes"
   def update_user(%User{} = user, attrs) do
@@ -52,4 +65,15 @@ defmodule PosterApp.UserContext do
 
   def delete_credential(%Credential{} = credential), do: Repo.delete(credential)
 
+  def follow(%User{} = user, user_id) do
+    following = user.following ++ [user_id]
+    updated_user = Ecto.Changeset.change(user, %{following: following})
+    Repo.update(updated_user)
+  end
+
+  def unfollow(%User{} = user, id) do
+    following = user.following |> List.delete(id)
+    updated_user = Ecto.Changeset.change(user, %{following: following})
+    Repo.update(updated_user)
+  end
 end

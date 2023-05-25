@@ -11,6 +11,7 @@ defmodule PosterApp.UserContext.User do
     field :first_name, :string
     field :last_name, :string
     field :role, :string
+    field :following, {:array, :integer}, default: []
     has_many :posts, Post
     has_one :credentials, Credential
   end
@@ -20,7 +21,7 @@ defmodule PosterApp.UserContext.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:first_name, :last_name, :date_of_birth, :role])
+    |> cast(attrs, [:first_name, :last_name, :date_of_birth, :role, :following])
     |> validate_required([:first_name, :last_name, :date_of_birth, :role])
     |> validate_inclusion(:role, @acceptable_roles)
     |> cast_assoc(:credentials)
