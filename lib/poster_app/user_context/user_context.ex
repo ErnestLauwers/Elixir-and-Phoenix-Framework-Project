@@ -64,16 +64,4 @@ defmodule PosterApp.UserContext do
   def delete_user(%User{} = user), do: Repo.delete(user)
 
   def delete_credential(%Credential{} = credential), do: Repo.delete(credential)
-
-  def follow(%User{} = user, user_id) do
-    following = user.following ++ [user_id]
-    updated_user = Ecto.Changeset.change(user, %{following: following})
-    Repo.update(updated_user)
-  end
-
-  def unfollow(%User{} = user, id) do
-    following = user.following |> List.delete(id)
-    updated_user = Ecto.Changeset.change(user, %{following: following})
-    Repo.update(updated_user)
-  end
 end

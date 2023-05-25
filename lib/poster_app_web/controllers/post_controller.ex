@@ -4,7 +4,8 @@ defmodule PosterAppWeb.PostController do
   alias PosterApp.UserContext
   alias PosterApp.PostContext
   alias PosterApp.PostContext.Post
-  alias PosterApp.PostContext.Comment
+  alias PosterApp.PostContext.Hashtag
+  alias PosterApp.Repo
 
   def index(conn, _params) do
     posts = PostContext.list_posts()

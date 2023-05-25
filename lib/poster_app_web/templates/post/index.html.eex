@@ -1,55 +1,33 @@
 <h1>Posts</h1>
 
 <table>
-  <thead>
-    <tr>
-      <th>User</th>
-      <th>Title</th>
-      <th>Created at</th>
-      <th>Likes</th>
-      <th>Show</th>
-      <th>Edit</th>
-      <th>Delete</th>
-      <th>Following</th>
-      <th>Like</th>
-    </tr>
-  </thead>
-  <tbody>
-    <%= for post <- @posts do %>
-    <tr>
-      <td><%= if post.user, do: post.user.first_name, else: "Unknown" %></td>
-      <td><%= post.title %></td>
-      <td><%= post.inserted_at %></td>
-      <td><%= post.likes %></td>
-      <td><span><%= link "Show", to: Routes.post_path(@conn, :interact, post) %></span></td>
-      <%= if @user_id == post.user_id || @user.role == "admin" do %>
-        <td><span><%= link "Edit", to: Routes.post_path(@conn, :edit, post) %></span></td>
-        <td>
-          <span>
-            <%= link "Delete",
-              to: Routes.post_path(@conn, :delete, post),
-              method: :delete,
-              data: [confirm: "Are you sure?"] %>
-          </span>
-        </td>
-      <% else %>
-        <td></td>
-        <td></td>
-      <% end %>
-
-      <%= if post.user.id in @user.following do %>
-        <td>F</td>
-      <% else %>
-        <td></td>
-      <% end %>
-      <%= if @user_id in post.liked_by do %>
-          <td><%= button "Unlike", to: Routes.post_path(@conn, :decrease_likes, post), method: :patch %></td>
-      <% else %>
-        <td><%= button "Like", to: Routes.post_path(@conn, :increase_likes, post), method: :patch %></td>
-      <% end %>
-    </tr>
-    <% end %>
-  </tbody>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Text</th>
+            <th>User</th>
+            <th>Created at</th>
+            <th>Hashtag(s)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <%= for post <- @posts do %>
+        <tr>
+            <td><%= post.title %></td>
+            <td><%= post.text %></td>
+            <td><%= if post.user, do: post.user.first_name, else: "Unknown" %></td>
+            <td><%= post.inserted_at %></td>
+            <td><%= Enum.join(Enum.map(post.hashtags, & &1.name), ", ") %></td>
+            <td>
+                <%= if @user_id == post.user_id do %>
+                    <span><%= link "Edit", to: Routes.post_path(@conn, :edit, post) %></span>
+                    <span><%= link "Delete", to: Routes.post_path(@conn, :delete, post),
+                    method: :delete, data: [confirm: "Are you sure?"] %></span>
+                <% end %>
+            </td>
+        </tr>
+        <% end %>
+    </tbody>
 </table>
 
 <%= link "New post", to: Routes.post_path(@conn, :new) %>

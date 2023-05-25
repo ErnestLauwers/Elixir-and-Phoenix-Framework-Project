@@ -43,7 +43,9 @@ defmodule PosterAppWeb.Router do
 
     get("/users/new", UserController, :new)
 
-    post("/users", UserController, :create)
+    post "/users", UserController, :create
+
+    delete "/users/:user_id", UserController, :delete
   end
 
   scope "/", PosterAppWeb do
@@ -95,11 +97,11 @@ defmodule PosterAppWeb.Router do
 
     patch("/users/unfollow/:user_id", UserController, :unfollow)
 
-    delete "/users/:user_id", UserController, :delete
+    get "/user_scope", PageController, :user_index
   end
 
   scope "/admin", PosterAppWeb do
-    pipe_through([:browser, :auth, :ensure_auth, :allowed_for_admins])
+    pipe_through [:browser, :auth, :ensure_auth, :allowed_for_admins]
   end
 
   # Other scopes may use custom stacks.
