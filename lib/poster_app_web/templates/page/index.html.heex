@@ -1,0 +1,10 @@
+<section class="phx-hero">
+  <h1><%= gettext "Welcome to %{name}!", name: "Poster" %></h1>
+  <p>The world's best social media platform</p>
+  <%= if @user_id != nil do %>
+  <li><%= link "Log Out", to: Routes.session_path(@conn, :logout) %></li>
+  <% else %>
+  <li><%= link "Log In", to: Routes.session_path(@conn, :new) %></li>
+  <li><%= link "Register", to: Routes.user_path(@conn, :new) %></li>
+  <% end %>
+</section>

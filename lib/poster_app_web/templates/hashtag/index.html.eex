@@ -1,0 +1,16 @@
+<h2>Search for Hashtags</h2>
+
+<%= form_for @changeset, @action, fn f -> %>
+
+<div class="form-group">
+    <%= label f, :name, class: "control-label" %>
+    <%= text_input f, :name, class: "form-control" %>
+    <%= error_tag f, :name %>
+</div>
+
+<div class="form-group">
+    <%= submit "Search", class: "btn btn-primary" %>
+</div>
+<% end %>
+
+<span><%= link "Back", to: Routes.post_path(@conn, :index) %></span>

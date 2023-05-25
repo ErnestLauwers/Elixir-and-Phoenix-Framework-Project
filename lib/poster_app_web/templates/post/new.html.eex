@@ -1,0 +1,30 @@
+<h1>New Post</h1>
+
+<%= form_for @changeset, Routes.post_path(@conn, :create), fn f -> %>
+<%= if @changeset.action do %>
+<div class="alert alert-danger">
+    <p>Oops, something went wrong! Please check the errors below.</p>
+</div>
+<% end %>
+
+<%= hidden_input f, :user_id, value: @user_id %>
+
+<%= label f, :title %>
+<%= text_input f, :title %>
+<%= error_tag f, :title %>
+
+<%= label f, :text %>
+<%= text_input f, :text %>
+<%= error_tag f, :text %>
+
+<%= label f, :hashtags %>
+<%= hashtag_input f, :hashtags %>
+<%= error_tag f, :hashtags %>
+<small class="help-text">hashtags seperated by commas</small>
+
+<div>
+    <%= submit "Post" %>
+</div>
+<% end %>
+
+<span><%= link "Back", to: Routes.post_path(@conn, :index) %></span>
