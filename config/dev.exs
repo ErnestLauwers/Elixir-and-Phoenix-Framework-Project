@@ -5,7 +5,7 @@ config :poster_app, PosterApp.Repo,
   username: "postgres",
   password: "tt",
   hostname: "localhost",
-  database: "poster_app_db",
+  database: "poster_app_database",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
