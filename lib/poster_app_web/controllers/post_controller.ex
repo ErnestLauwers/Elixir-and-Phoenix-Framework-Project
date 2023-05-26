@@ -11,7 +11,12 @@ defmodule PosterAppWeb.PostController do
     credential = Guardian.Plug.current_resource(conn)
     user_id = credential.user_id
     user = UserContext.get_user!(user_id)
-    render(conn, "index.html", posts: posts, user_id: user_id, user: user)
+    sorted_posts = Enum.sort_by(posts, &sort_by_following(&1, user.following))
+    render(conn, "index.html", posts: sorted_posts, user_id: user_id, user: user)
+  end
+
+  defp sort_by_following(post, following_list) do
+    if post.user_id in following_list, do: 0, else: 1
   end
 
   def new(conn, _parameters) do

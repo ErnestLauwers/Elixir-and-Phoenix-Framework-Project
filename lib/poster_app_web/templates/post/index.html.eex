@@ -38,9 +38,9 @@
       <% end %>
 
       <%= if post.user.id in @user.following do %>
-        <td>F</td>
+        <td>True</td>
       <% else %>
-        <td></td>
+        <td>False</td>
       <% end %>
       <%= if @user_id in post.liked_by do %>
           <td><%= button "Unlike", to: Routes.post_path(@conn, :decrease_likes, post), method: :patch %></td>
