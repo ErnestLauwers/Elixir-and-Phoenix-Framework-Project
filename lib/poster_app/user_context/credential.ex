@@ -14,6 +14,10 @@ defmodule PosterApp.UserContext.Credential do
     credential
     |> cast(attrs, [:email, :hashed_password, :user_id])
     |> validate_required([:email, :hashed_password])
+    |> unique_constraint(:email,
+      name: :unique_email_index,
+      message: "There is already a user with this email..."
+    )
     |> put_password_hash()
   end
 

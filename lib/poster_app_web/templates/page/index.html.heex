@@ -2,9 +2,17 @@
   <h1><%= gettext "Welcome to %{name}!", name: "Poster" %></h1>
   <p>The world's best social media platform</p>
   <%= if @user_id != nil do %>
-  <li><%= link "Log Out", to: Routes.session_path(@conn, :logout) %></li>
+    <li><%= link "Log Out", to: Routes.session_path(@conn, :logout) %></li>
   <% else %>
-  <li><%= link "Log In", to: Routes.session_path(@conn, :new) %></li>
-  <li><%= link "Register", to: Routes.user_path(@conn, :new) %></li>
+    <li><%= link "Log In", to: Routes.session_path(@conn, :new) %></li>
+    <li><%= link "Register", to: Routes.user_path(@conn, :new) %></li>
   <% end %>
 </section>
+<%= if @user_id == nil do %>
+  <section class="phx-hero">
+    <p>!!run "mix run priv/repo/seeds.exs" to populate your database!!</p>
+    <p>User 1 -> email: "user1@gmail.com" password: "user"</p>
+    <p>User 2 -> email: "user2@gmail.com" password: "user"</p>
+    <p>Admin -> email: "admin@gmail.com" password: "admin"</p>
+  </section>
+<% end %>

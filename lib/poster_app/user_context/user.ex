@@ -28,11 +28,7 @@ defmodule PosterApp.UserContext.User do
     |> cast_assoc(:posts)
     |> unique_constraint(:date_of_birth,
       name: :unique_users_index,
-      message:
-        "Wow that's coincidence! " <>
-          "Another person with the same first name and last name was born at this day. " <>
-          "Oh gosh, our system can't deal with this. " <>
-          "Contact our administrators or change your name. "
+      message: "There is already a user with this name and birthdate..."
     )
   end
 end

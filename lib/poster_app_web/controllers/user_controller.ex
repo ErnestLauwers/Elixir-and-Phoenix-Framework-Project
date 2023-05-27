@@ -4,6 +4,9 @@ defmodule PosterAppWeb.UserController do
   alias PosterAppWeb.Guardian
   alias PosterApp.UserContext
   alias PosterApp.UserContext.User
+  alias PosterApp.Repo
+  alias PosterApp.PostContext.Post
+  import Ecto.Query
 
   def new(conn, _parameters) do
     changeset = UserContext.change_user(%User{})
@@ -72,6 +75,7 @@ defmodule PosterAppWeb.UserController do
 
     if user_logged_in.role == "user" do
       {:ok, _credential} = UserContext.delete_credential(credential)
+      Repo.delete_all(from(p in Post, where: p.user_id == ^id))
       {:ok, _user} = UserContext.delete_user(user)
 
       conn
@@ -81,6 +85,7 @@ defmodule PosterAppWeb.UserController do
       |> redirect(to: "/")
     else
       {:ok, _credential} = UserContext.delete_credential(credential)
+      Repo.delete_all(from(p in Post, where: p.user_id == ^id))
       {:ok, _user} = UserContext.delete_user(user)
 
       conn
