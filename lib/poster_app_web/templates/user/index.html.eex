@@ -21,23 +21,21 @@
             <td><%= user.date_of_birth %></td>
             <td><%= user.role %></td>
 
-            <td>
-                <span><%= link "Show", to: Routes.user_path(@conn, :show, user) %></span>
-            </td>
-            <%= if @user_id == user.id || @user.role == "admin" do %>
-                <td><span><%= link "Edit", to: Routes.user_path(@conn, :edit, user) %></span></td>
-                <%= if user.role != "admin"do %>
-                <td>
-                    <span><%= link "Delete", to: Routes.user_path(@conn, :delete, user),
-                    method: :delete, data: [confirm: "Are you sure?"] %></span>
-                </td>
-                <td></td>
-                <% end %>
-            <% end %>
+            <td><%= link "Show", to: Routes.user_path(@conn, :show, user) %></td>
 
+            <%= if @user_id == user.id || @user.role == "admin" do %>
+                <td><%= link "Edit", to: Routes.user_path(@conn, :edit, user) %></td>
+                <%= if user.role != "admin"do %>
+                    <td>
+                        <%= link "Delete", to: Routes.user_path(@conn, :delete, user),
+                        method: :delete, data: [confirm: "Are you sure?"] %>
+                    </td>
+                <% end %>
+            <% else %>
+                <td></td>
+                <td></td>
+            <% end %>
             <%= if @user_id != user.id do %>
-                <td></td>
-                <td></td>
                 <td>
                     <%= if user.id in @user.following do %>
                         <%= button "Unfollow", to: Routes.user_path(@conn, :unfollow, user), method: :patch %>
@@ -46,7 +44,6 @@
                     <% end %>
                 </td>
             <% end %>
-
         </tr>
         <% end %>
     </tbody>
