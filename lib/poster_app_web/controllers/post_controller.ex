@@ -102,7 +102,8 @@ defmodule PosterAppWeb.PostController do
     user = UserContext.get_user!(user_id)
     PostContext.increase_likes(post, user_id)
     posts = PostContext.list_posts()
-    render(conn, "index.html", posts: posts, user_id: user_id, user: user)
+    sorted_posts = Enum.sort_by(posts, &sort_by_following(&1, user.following))
+    render(conn, "index.html", posts: sorted_posts, user_id: user_id, user: user)
   end
 
   def decrease_likes(conn, %{"post_id" => id}) do
@@ -112,7 +113,8 @@ defmodule PosterAppWeb.PostController do
     user = UserContext.get_user!(user_id)
     PostContext.decrease_likes(post, user_id)
     posts = PostContext.list_posts()
-    render(conn, "index.html", posts: posts, user_id: user_id, user: user)
+    sorted_posts = Enum.sort_by(posts, &sort_by_following(&1, user.following))
+    render(conn, "index.html", posts: sorted_posts, user_id: user_id, user: user)
   end
 
   def add_comment(conn, %{"post_id" => id}) do
