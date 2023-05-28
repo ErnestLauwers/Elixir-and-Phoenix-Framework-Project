@@ -58,7 +58,8 @@ defmodule PosterAppWeb.PostController do
         |> redirect(to: Routes.post_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", post: post, changeset: changeset)
+        user_id = Guardian.Plug.current_resource(conn)
+        render(conn, "edit.html", post: post, changeset: changeset, user_id: user_id)
     end
   end
 

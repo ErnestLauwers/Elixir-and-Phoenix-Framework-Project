@@ -51,7 +51,7 @@ defmodule PosterAppWeb.Router do
 
     get("/hashtags/search", HashtagController, :index)
 
-    post("hashtags/search/result", HashtagController, :show)
+    post("/hashtags/search/result", HashtagController, :show)
 
     get("/posts/new", PostController, :new)
 
@@ -85,9 +85,9 @@ defmodule PosterAppWeb.Router do
 
     get("/posts/add_comment/:post_id", PostController, :add_comment)
 
-    patch("posts/like/:post_id", PostController, :increase_likes)
+    patch("/posts/like/:post_id", PostController, :increase_likes)
 
-    patch("posts/unlike/:post_id", PostController, :decrease_likes)
+    patch("/posts/unlike/:post_id", PostController, :decrease_likes)
 
     post("/posts/create_comment/:post_id", PostController, :create_comment)
 
